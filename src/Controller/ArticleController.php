@@ -27,10 +27,10 @@ class ArticleController
 
     public function new()
     {
-//        if (!isset($_SESSION['user'])) {
-//            header('Location: /');
-//            die;
-//        }
+        //        if (!isset($_SESSION['user'])) {
+        //            header('Location: /');
+        //            die;
+        //        }
 
         $article_post = json_decode(file_get_contents('php://input'), true);
 
@@ -74,10 +74,10 @@ class ArticleController
 
     public function edit()
     {
-//        if (!isset($_SESSION['user'])) {
-//            header('Location: /');
-//            die;
-//        }
+        //        if (!isset($_SESSION['user'])) {
+        //            header('Location: /');
+        //            die;
+        //        }
 
         $article_post = json_decode(file_get_contents('php://input'), true);
 
@@ -100,10 +100,10 @@ class ArticleController
 
     public function delete()
     {
-//        if (!isset($_SESSION['user'])) {
-//            header('Location: /');
-//            die;
-//        }
+        //        if (!isset($_SESSION['user'])) {
+        //            header('Location: /');
+        //            die;
+        //        }
 
         $data = json_decode(file_get_contents('php://input'), true);
         $articleDao = new ArticleDao();

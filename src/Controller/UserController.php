@@ -166,7 +166,6 @@ class UserController
                 die;
             }
 
-
             //Vérification du mot de passe.
             if ($user->verifyPwd($data["pwd"])) {
                 $user->deletePassword();

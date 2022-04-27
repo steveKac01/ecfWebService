@@ -67,7 +67,6 @@ class SignupController
             die;        
         }
 
-        //On instancie un objet user.
         $userDao = new UserDao();
         $user = new User();
         $user->setPseudo($data["pseudo"])
