@@ -33,6 +33,32 @@ class UserDao extends AbstractDao
             ->setCreatedAt($result['created_at']);
     }
 
+
+/**
+     * Récupère un utilisateur par son id si l'id existe dans la base de données,
+     * sinon on récupèrera NULL
+     *
+     * @param string $email L'email de l'utilisateur
+     * @return User|null Renvoi un utilisateur ou null
+     */
+    public function getById(int $idUser): ?User
+    {
+        $sth = $this->dbh->prepare('SELECT * FROM user WHERE id_user = :id');
+        $sth->execute([':id' => $idUser]);
+        $result = $sth->fetch(PDO::FETCH_ASSOC);
+
+        if (empty($result)) {
+            return null;
+        }
+
+        $u = new User();
+        return $u->setIdUser($idUser)
+            ->setPseudo($result['pseudo'])
+            ->setPwd($result['pwd'])
+            ->setEmail($result['email'])
+            ->setCreatedAt($result['created_at']);
+    }
+
     /**
      * Récupère la liste de tous les utilisateur dans la base de donnée
      *

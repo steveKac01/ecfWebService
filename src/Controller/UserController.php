@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use PDOException;
 use App\Dao\UserDao;
-use App\Model\User;
 
 class UserController
 {
@@ -93,9 +92,8 @@ class UserController
     }
 
     /**
-     * Edition d'un utilisateur,vérification de la méthode http utilisée
-     * pour nue methode "GET" 
-     * 
+     * Edition d'un utilisateur, en méthode GET on envoi l'utilisateur demandé
+     * et en methode PUT on met à jour l'utilisateur.
      * @return void
      */
     public function edit()
@@ -123,22 +121,22 @@ class UserController
                 && isset($data['new_pwd']) && isset($data['conf_new_pwd'])
             ) {
                 if (empty(trim($data["id_user"]))) {
-                    $errors_messages[] = "Le champ id_user est requis.";
+                    $errors_messages[] = "L'id utilisateur est requis.";
                 }
                 if (empty(trim($data["pseudo"]))) {
-                    $errors_messages[] = "Le champ pseudo est requis.";
+                    $errors_messages[] = "Le pseudo est requis.";
                 }
                 if (empty(trim($data["email"]))) {
-                    $errors_messages[] = "Le champ email est requis.";
+                    $errors_messages[] = "L'email'est requis.";
                 }
                 if (empty(trim($data["pwd"]))) {
-                    $errors_messages[] = "Le champ pwd est requis.";
+                    $errors_messages[] = "Le mot de passe est requis.";
                 }
                 if (empty(trim($data["new_pwd"]))) {
-                    $errors_messages[] = "Le champ new_pwd est requis.";
+                    $errors_messages[] = "Le nouveau mot de passe est requis.";
                 }
                 if (empty(trim($data["conf_new_pwd"]))) {
-                    $errors_messages[] = "Le champ conf_new_pwd est requis.";
+                    $errors_messages[] = "La confirmation du nouveau mot de passe est requis.";
                 }
 
                 // Vérification de la concordance des deux nouveaux mots de passe.          
@@ -149,19 +147,25 @@ class UserController
                 $errors_messages[] = "Tous les champs ne sont pas remplis.";
             }
 
-            //Note pour thibaut: j'ai une erreur de front alors j'ai continué avec postman pour pas rester bloquer.
+            //Récupération de utilisateur par l'id.
+            $user = $daoUser->getById($data["id_user"]);       
+
             if (isset($errors_messages)) {
                 //On retourne au front les erreurs en format json et on arrête le script.
                 header("Type-Content: application/json");
                 echo json_encode([
                     'error_messages' =>
                     ['danger' => $errors_messages]
-                ]);
+                 , 'user_post' => [
+                    "id_user" => $user->getIdUser(),
+                    "pseudo" =>  $user->getPseudo(),
+                    "email" => $user->getEmail(),
+                    "created_at" =>$user->getCreatedAt()              
+                ]
+            ]);
                 die;
             }
 
-            //Récupération de utilisateur.
-            $user = $daoUser->getByEmail($data["email"]);
 
             //Vérification du mot de passe.
             if ($user->verifyPwd($data["pwd"])) {
